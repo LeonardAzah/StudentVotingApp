@@ -20,7 +20,7 @@ const StyledCard = styled((props) => <Card {...props} />)(({ theme }) => ({
   backgroundColor: "#fafafa",
   boxShadow: 5,
   width: "333px",
-  height: "220px",
+  height: "170px",
 }));
 
 const styledAvatar = {
@@ -28,35 +28,43 @@ const styledAvatar = {
   width: "8rem",
 };
 
-const VoteCard = ({ name, bio, handleClick }) => {
+const ResultCard = ({ name, voteCount }) => {
   return (
     <StyledCard elevation={1}>
       <Box sx={{ display: "flex" }}>
         <Avatar variant="rounded" sx={styledAvatar} alt="photo" src={me} />
 
-        <Box sx={{ padding: "0.1rem" }}>
+        <Box
+          sx={{
+            padding: "0.1rem",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Typography
-            variant="h6"
+            variant="h5"
             sx={{ fontWeight: 700, color: "#233862", textAlign: "center" }}
           >
             {name}
           </Typography>
 
-          <Typography variant="body2" sx={{ textAlign: "center" }}>
-            {bio}
+          <Typography
+            variant="h5"
+            sx={{
+              textAlign: "center",
+              color: "#F50312",
+              fontWeight: 700,
+              fontSize: "5rerm",
+            }}
+          >
+            {voteCount} votes
           </Typography>
         </Box>
       </Box>
-      <Buttons
-        variant="contained"
-        color="primary"
-        btnText="Vote"
-        sx={{ fontWeight: 700, fontSize: "17px" }}
-        onClick={handleClick}
-        fullWidth
-      />
     </StyledCard>
   );
 };
 
-export default VoteCard;
+export default ResultCard;

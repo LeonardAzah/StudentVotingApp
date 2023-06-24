@@ -18,7 +18,6 @@ const useAxios = () => {
         ...requestConfig,
         signal: ctrl.signal,
       });
-
       setResponse(res.data);
       return true;
     } catch (err) {
@@ -27,6 +26,7 @@ const useAxios = () => {
           setErrorMessage(err.response.data.message);
         }
       }
+      console.log(err);
     } finally {
       setLoading(false);
     }

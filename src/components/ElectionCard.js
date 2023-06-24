@@ -6,6 +6,7 @@ import {
   CardHeader,
   Avatar,
   CardContent,
+  Box,
 } from "@mui/material";
 import styled from "@emotion/styled";
 
@@ -40,28 +41,25 @@ const styledAvatar = {
   display: "flex",
   justifyContent: "center",
 };
-const ElectionCard = ({ result, link, title }) => {
-  <StyledCard
-    elevation={1}
-    component={Link}
-    // to={`${link}/${result.id}`}
-    // state={result.id}
-    // key={result.id}
-  >
-    <Avatar variant="circular" sx={styledAvatar}>
-      <CardMedia
-        component="img"
-        height="50"
-        width="50"
-        image={sideimage}
-        alt="vote"
-        sx={styledImage}
-      />
-    </Avatar>
+const ElectionCard = ({ election, link }) => {
+  const { title, id } = election;
+  <StyledCard elevation={1}>
+    <Box component={Link} to={link} state={id}>
+      <Avatar variant="circular" sx={styledAvatar}>
+        <CardMedia
+          component="img"
+          height="50"
+          width="50"
+          image={sideimage}
+          alt="vote"
+          sx={styledImage}
+        />
+      </Avatar>
 
-    <CardContent>
-      <Typography variant="body1">{title}</Typography>
-    </CardContent>
+      <CardContent>
+        <Typography variant="body1">{title}</Typography>
+      </CardContent>
+    </Box>
   </StyledCard>;
 };
 

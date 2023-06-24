@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -28,9 +28,7 @@ function Modal(props) {
           {text}
         </DialogContentText>
       </DialogContent>
-      <DialogActions
-        sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
-      >
+      <DialogActions sx={{ display: "flex", justifyContent: "space-between" }}>
         <Buttons
           variant="outlined"
           color="primary"

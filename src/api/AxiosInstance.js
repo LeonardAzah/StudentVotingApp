@@ -7,8 +7,8 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     let userinfo = JSON.parse(window.localStorage.getItem("user"));
-    const accessToken = userinfo.token;
-    config.headers.common["x-access-token"] = accessToken;
+    const accessToken = userinfo.accessToken;
+    config.headers["x-access-token"] = accessToken;
 
     return config;
   },

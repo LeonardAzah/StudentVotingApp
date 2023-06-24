@@ -5,6 +5,8 @@ import { Routes, Route } from "react-router-dom";
 import RequireAuth from "../hooks/RequireAuth";
 import Election from "./Election";
 import Result from "./Result";
+import Votepage from "./Votepage";
+import Poll from "./Poll";
 
 const AppRoutes = () => {
   return (
@@ -28,10 +30,26 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/home/poll/candidates/:id"
+        element={
+          <RequireAuth>
+            <Votepage />
+          </RequireAuth>
+        }
+      />
+      <Route
         path="/home/results"
         element={
           <RequireAuth>
             <Result />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/home/results/votes/:id"
+        element={
+          <RequireAuth>
+            <Poll />
           </RequireAuth>
         }
       />
