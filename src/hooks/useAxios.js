@@ -24,7 +24,7 @@ const useAxios = () => {
       if (err.isAxiosError) {
         if (err.response) {
           setErrorMessage(err.response.data.error);
-          // console.log(response);
+          console.log(err);
         }
       }
       // console.log(err.response.data.error);

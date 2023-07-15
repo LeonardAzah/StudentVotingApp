@@ -25,8 +25,7 @@ const Votepage = () => {
 
   const [response, errorMessage, loading, axiosFetch] = useAxios();
   const CANDIDATES_URL = `/poll/candidates/${id}`;
-  // const VOTE_URL = `/std/vote/${studentId}/poll/${id}/candidate/${selectedStudent}`;
-  const VOTE_URL = `/poll/vote/${studentId}/poll/${id}/candidate/${selectedStudent}`;
+  const VOTE_URL = `/std/vote/${studentId}/poll/${id}/candidate/${selectedStudent}`;
 
   const handleClickOpen = (candidate) => {
     setData(candidate);

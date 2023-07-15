@@ -32,7 +32,6 @@ const Poll = () => {
   }, []);
 
   const candidates = response.candidateVotes;
-  console.log(candidates);
 
   return (
     <Box>
