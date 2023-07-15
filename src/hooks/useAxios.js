@@ -23,10 +23,11 @@ const useAxios = () => {
     } catch (err) {
       if (err.isAxiosError) {
         if (err.response) {
-          setErrorMessage(err.response.data.message);
+          setErrorMessage(err.response.data.error);
+          // console.log(response);
         }
       }
-      console.log(err);
+      // console.log(err.response.data.error);
     } finally {
       setLoading(false);
     }

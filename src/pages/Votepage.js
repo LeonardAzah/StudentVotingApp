@@ -1,35 +1,42 @@
 import React, { useEffect, useState } from "react";
 import Appbar from "../components/Appbar";
-import { Typography, Box } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { Typography, Box, Snackbar, Alert } from "@mui/material";
+import { useParams } from "react-router-dom";
 import VoteCard from "../components/VoteCard";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
 import Spinner from "../components/Spinner";
 import NotPresent from "../components/NotPresent";
 import Modal from "../components/Modal";
-
-const userInfo = window.localStorage.getItem("user");
-const user = JSON.parse(userInfo);
-const studentId = user.student;
-const departmentId = user.department;
+import CountdownTimer from "../components/CountdownTimer";
 
 const Votepage = () => {
+  const { id } = useParams();
+
   const [open, setOpen] = React.useState(false);
-  const [toSuccess, setToSuccess] = useState(false);
-  const { id, candidateId } = useParams();
-  const navigate = useNavigate();
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [data, setData] = useState(null);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+
+  const userInfo = window.localStorage.getItem("user");
+  const user = JSON.parse(userInfo);
+  const studentId = user.id;
 
   const [response, errorMessage, loading, axiosFetch] = useAxios();
   const CANDIDATES_URL = `/poll/candidates/${id}`;
-  const VOTE_URL = `/std/vote/${studentId}/poll/${id}/candidate/${candidateId}`;
+  // const VOTE_URL = `/std/vote/${studentId}/poll/${id}/candidate/${selectedStudent}`;
+  const VOTE_URL = `/poll/vote/${studentId}/poll/${id}/candidate/${selectedStudent}`;
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (candidate) => {
+    setData(candidate);
+    setSelectedStudent(candidate.id);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setSelectedStudent(null);
   };
 
   const handleSubmit = async () => {
@@ -39,8 +46,12 @@ const Votepage = () => {
       url: VOTE_URL,
     });
     if (success) {
-      setToSuccess(true);
-      navigate("/home/poll");
+      setShowSuccessAlert(true);
+      getData();
+      handleClose();
+    } else {
+      handleClose();
+      setShowErrorAlert(true);
     }
   };
 
@@ -57,15 +68,24 @@ const Votepage = () => {
   useEffect(() => {
     getData();
   }, []);
-  const candidates = response;
-  console.log(candidates);
 
-  const handleModal = {};
+  const candidates = response;
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowSuccessAlert(false);
+    setShowErrorAlert(false);
+  };
+
   return (
     <Box>
-      <Box sx={{ paddingBottom: "8rem" }}>
+      <Box sx={{ paddingBottom: "5rem" }}>
         <Appbar />
       </Box>
+
+      <CountdownTimer id={id} />
       <Box>
         <Box
           sx={{
@@ -87,26 +107,73 @@ const Votepage = () => {
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
-            {loading && loading ? (
-              <Spinner text="Fetching elections..." />
-            ) : (
-              candidates.map((candidate) => (
-                <>
-                  <VoteCard
-                    key={candidate.id}
-                    name={candidate.name}
-                    bio={candidate.bio}
-                    handleClick={handleClickOpen}
-                  />
-                  <Modal
-                    open={open}
-                    handleClose={handleClose}
-                    text={`Vote for ${candidate.name},  Are you sure you want to proceed?`}
-                    handleSubmit={handleSubmit}
-                  />
-                </>
-              ))
-            )}
+            <Modal
+              open={open}
+              handleClose={handleClose}
+              text={`Vote for ${
+                data && data.name
+              },  Are you sure you want to proceed?`}
+              handleSubmit={handleSubmit}
+            />
+            <Snackbar
+              anchorOrigin={{ vertical: "top", horizontal: "left" }}
+              open={showSuccessAlert}
+              autoHideDuration={6000}
+              onClose={handleAlertClose}
+            >
+              <Alert
+                onClose={handleAlertClose}
+                severity="success"
+                variant="filled"
+                sx={{ width: "100%" }}
+              >
+                Vote successfully cast
+              </Alert>
+            </Snackbar>
+
+            <Snackbar
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              open={showErrorAlert}
+              autoHideDuration={3000}
+              onClose={handleAlertClose}
+            >
+              <Alert
+                severity="error"
+                variant="filled"
+                onClose={handleAlertClose}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
+
+            <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
+              {loading && <Spinner text="Fetching elections..." />}
+
+              {candidates && candidates.length > 0 ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2.5,
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                  }}
+                >
+                  {candidates.map((candidate) => (
+                    <>
+                      <VoteCard
+                        key={candidate.id}
+                        name={candidate.name}
+                        bio={candidate.bio}
+                        image={candidate.image}
+                        handleClick={() => handleClickOpen(candidate)}
+                      />
+                    </>
+                  ))}
+                </Box>
+              ) : (
+                <NotPresent text="No Available Candidates" />
+              )}
+            </Box>
           </Box>
         </Box>
       </Box>

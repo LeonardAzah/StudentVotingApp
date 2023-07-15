@@ -8,7 +8,8 @@ import ResultCard from "../components/ResultCard";
 import Spinner from "../components/Spinner";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
-import { ca } from "date-fns/locale";
+import NotPresent from "../components/NotPresent";
+import CountdownTimer from "../components/CountdownTimer";
 
 const Poll = () => {
   const { id } = useParams();
@@ -30,14 +31,16 @@ const Poll = () => {
     getData();
   }, []);
 
-  const candidates = response;
+  const candidates = response.candidateVotes;
   console.log(candidates);
 
   return (
     <Box>
-      <Box sx={{ paddingBottom: "8rem" }}>
+      <Box sx={{ paddingBottom: "5rem" }}>
         <Appbar />
       </Box>
+      <CountdownTimer id={id} />
+
       <Box>
         <Box
           sx={{
@@ -57,26 +60,32 @@ const Poll = () => {
             Election Results
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
-            {loading && loading ? (
-              <Spinner text="Fetching elections..." />
-            ) : (
-              candidates.map((candidate) => (
+        <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
+          {loading && <Spinner text="Fetching election results..." />}
+
+          {candidates && candidates.length > 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2.5,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              {candidates.map((candidate) => (
                 <>
                   <ResultCard
                     key={candidate.id}
-                    name={
-                      candidate.departmentalCandidate
-                        ? candidate.departmentalCandidate.name
-                        : candidate.facultyCandidate.name
-                    }
-                    voteCount={candidate.voteCount}
+                    name={candidate.name}
+                    image={candidate.image}
+                    voteCount={candidate.count}
                   />
                 </>
-              ))
-            )}
-          </Box>
+              ))}
+            </Box>
+          ) : (
+            <NotPresent text="No Available Candidates" />
+          )}
         </Box>
       </Box>
     </Box>

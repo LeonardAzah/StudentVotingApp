@@ -8,6 +8,7 @@ import Result from "./Result";
 import Election from "./Election";
 import ElectionCard from "../components/ElectionCard";
 import Modal from "../components/Modal";
+import Footer from "../components/Footer";
 
 const Dashboard = () => {
   const { userInfo } = useContext(AuthContext);
@@ -31,6 +32,7 @@ const Dashboard = () => {
           2023 CAMPUS ELECTION
         </Typography>
       </Box>
+      <Footer />
     </div>
   );
 };

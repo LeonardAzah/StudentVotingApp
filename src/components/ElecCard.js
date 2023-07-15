@@ -1,9 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import { Avatar } from "@mui/material";
@@ -14,15 +12,15 @@ import { Link } from "react-router-dom";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const StyledCard = styled((props) => <Card {...props} />)(({ theme }) => ({
-  padding: "1rem",
   borderRadius: "0.5rem",
   backgroundColor: "#fafafa",
   boxShadow: 5,
-  width: "150px",
-  height: "200px",
+  width: "265px",
+  height: "130px",
+  boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
 }));
 
-export default function BasicCard({ title, id, link }) {
+export default function BasicCard({ title, id, link, isActive }) {
   return (
     <StyledCard
       component={Link}
@@ -35,34 +33,34 @@ export default function BasicCard({ title, id, link }) {
         textDecoration: "none",
       }}
     >
-      {/* <Switch {...label} defaultChecked /> */}
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        {isActive ? <Switch {...label} defaultChecked /> : null}
+      </Box>
 
       <Avatar
         sx={{
-          height: "4rem",
-          width: "4rem",
+          height: "3rem",
+          width: "3rem",
           margin: "10px auto",
           display: "flex",
           justifyContent: "center",
         }}
       >
-        <BallotIcon />
+        <BallotIcon fontSize="large" />
       </Avatar>
-      <CardContent>
-        {title && (
-          <Typography
-            sx={{
-              fontSize: "14px",
-              textAlign: "center",
-              fontWeight: 400,
-              lineHeight: "1.5rem",
-            }}
-            variant="h5"
-          >
-            {title}
-          </Typography>
-        )}
-      </CardContent>
+      {title && (
+        <Typography
+          sx={{
+            fontSize: "14px",
+            textAlign: "center",
+            fontWeight: 400,
+            lineHeight: "1.5rem",
+          }}
+          variant="h5"
+        >
+          {title}
+        </Typography>
+      )}
     </StyledCard>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Grid, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Formik, Form, Field } from "formik";
@@ -9,14 +9,12 @@ import InputText, { usePasswordToggle } from "../components/InputText";
 
 import { Link, useNavigate } from "react-router-dom";
 
-// import { colors } from "../../utils/DefaultStyle";
 import AuthContext from "../hooks/AuthContext";
 
-// import InputText from "../components/InputText"
 import logo from "../assets/logo.png";
 
 export const gridStyle = {
-  marginTop: { xs: "40%", sm: "10%" },
+  marginTop: { xs: "40%", sm: "5%" },
 };
 
 export const btnStyle = {
@@ -41,13 +39,13 @@ const Signin = () => {
 
   const onHandleSubmit = async (values, props) => {
     const isLoggedIn = await login(values);
-    console.log(isLoggedIn);
-    console.log(userInfo);
-
     props.setSubmitting(false);
     isLoggedIn && navigate("/home");
   };
 
+  useEffect(() => {
+    onHandleSubmit();
+  }, [errorMessage]);
   return (
     <Grid
       container
@@ -78,12 +76,15 @@ const Signin = () => {
           {(props) => (
             <Form>
               <Typography
-                className={errorMessage ? "errorMessage" : "offscreen"}
+                className={
+                  errorMessage && errorMessage ? "errorMessage" : "offscreen"
+                }
                 aria-live="assertive"
                 sx={{
-                  fontWeight: 900,
-                  fontSize: "1rem",
+                  fontWeight: 700,
+                  fontSize: "0.9rem",
                   marginBottom: "1rem",
+                  color: "#ba000d",
                 }}
               >
                 {errorMessage}
@@ -122,7 +123,7 @@ const Signin = () => {
                       style={{ width: "20px", height: "20px", size: "0.5rem" }}
                     />
                   ) : (
-                    "Sign in"
+                    "Sign In"
                   )
                 }
                 fullWidth

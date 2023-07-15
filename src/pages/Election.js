@@ -12,13 +12,14 @@ import Appbar from "../components/Appbar";
 import BasicCard from "../components/ElecCard";
 import NotPresent from "../components/NotPresent";
 
-const userInfo = window.localStorage.getItem("user");
-const user = JSON.parse(userInfo);
-const facultyId = user.faculty;
-const departmentId = user.department;
-const ELECTION_URL = `/poll/faculty/${facultyId}/department/${departmentId}`;
 const Election = () => {
   const [response, errorMessage, loading, axiosFetch] = useAxios();
+
+  const userInfo = window.localStorage.getItem("user");
+  const user = JSON.parse(userInfo);
+  const facultyId = user.faculty;
+  const departmentId = user.department;
+  const ELECTION_URL = `/poll/faculty/${facultyId}/department/${departmentId}`;
 
   const getData = async () => {
     await axiosFetch({
@@ -34,11 +35,11 @@ const Election = () => {
     getData();
   }, []);
 
-  const elections = response.polls;
+  const elections = response.facultyPolls;
   const departmentalElections = response.departmentpolls;
   return (
     <Box>
-      <Box sx={{ paddingBottom: "8rem" }}>
+      <Box sx={{ paddingBottom: "5rem" }}>
         <Appbar />
       </Box>
       <Box>
@@ -64,12 +65,20 @@ const Election = () => {
           {loading && <Spinner text="Fetching elections..." />}
 
           {elections && elections.length > 0 ? (
-            <Box sx={{ display: "flex", gap: 2.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2.5,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
               {elections.map((election) => (
                 <BasicCard
                   key={election.id}
                   id={election.id}
                   title={election.title}
+                  isActive={election.isActive}
                   link={`/home/poll/candidates/${election.id}`}
                 />
               ))}
@@ -103,12 +112,20 @@ const Election = () => {
           {loading && <Spinner text="Fetching elections..." />}
 
           {elections && elections.length > 0 ? (
-            <Box sx={{ display: "flex", gap: 2.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2.5,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
               {departmentalElections.map((election) => (
                 <BasicCard
                   key={election.id}
                   id={election.id}
                   title={election.title}
+                  isActive={election.isActive}
                   link={`/home/poll/candidates/${election.id}`}
                 />
               ))}

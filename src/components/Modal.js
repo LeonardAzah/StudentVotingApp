@@ -16,6 +16,8 @@ const buttonStyle = {
 function Modal(props) {
   const { text, open, handleClose, handleSubmit } = props;
 
+  // const VOTE_URL = `/std/vote/${studentId}/poll/${id}/candidate/${candidateId}`;
+
   return (
     <Dialog
       open={open}
